@@ -63,6 +63,7 @@ int board_getBoardCoin (int pos)
 	return coin;
 }
 
+
 void board_initBoard(void)
 {
 	int i;

@@ -69,6 +69,42 @@ void initPlayer(void)
 	}
 }
 
+int getAlivePlayer (void)
+{
+	int i;
+	int count = 0;
+	
+	for (i=0; i<N_PLAYER; i++)
+	{
+		if (player_status[i] == PLAYERSTATUS_LIVE ||
+			player_status[i] == PLAYERSTATUS_END)
+			count++;
+	}
+	return count;
+ } 
+ 
+ int getWinner (void)
+ {
+ 	int i;
+ 	int max_coin = -1;
+ 	int max_player = -1;
+ 	
+ 	for (i=0; i<N_PLAYER; i++)
+ 	{
+ 		if (player_status[i] == PLAYERSTATUS_LIVE ||
+		 	player_status[i] == PLAYERSTATUS_END)
+		 	{
+		 		if (player_coin [i] > max_coin)
+		 		{
+		 			max_coin = player_coin[i];
+		 			max_player = i;
+				 }
+			 }
+	 }
+	 return max_player;
+ }
+
+
 int gameEnd (void)
 {
 	int i;
@@ -149,11 +185,12 @@ int main(int argc, char *argv[]) {
 			player_status[turn] = PLAYERSTATUS_END;
 		}
 		
+	
 		printf("Die result : %i, %s moved to %i\n", die_result, player_name[turn], player_position[turn]);
 		
 		player_coin [turn] += board_getBoardCoin(player_position[turn]);
 		printf("Lucky! %s got %i coins\n", player_name[turn], player_coin [turn]);
-		
+		 
 		turn = (turn+1) %N_PLAYER;
 		
 		if (turn == 0)
@@ -165,6 +202,13 @@ int main(int argc, char *argv[]) {
 	
 	} while(gameEnd() == 0);
 
+	int alive = getAlivePlayer();
+	int winner = getWinner();
+	
+	printf("Alive players : %d\n", alive);
+	printf("Winner : %s with %d coins!\n",
+			player_name [winner], player_coin[winner]);
+	
 
 	//ending
 	printf("\n\n\n\n\n\n\n\n\n\n");
